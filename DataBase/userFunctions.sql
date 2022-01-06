@@ -84,7 +84,7 @@ USE `bookstore`;
 DROP procedure IF EXISTS `editUserInfo`;
 DELIMITER $$
 USE `bookstore`$$
-CREATE PROCEDURE editUserInfo(userName varchar(45), password varchar(15),
+CREATE PROCEDURE editUserInfo(userName varchar(45),
 					 new_user_name varchar(45), new_password varchar(15),
 					 new_last_name varchar(45), new_first_name varchar(45), new_email varchar(45), 
 					 new_phone varchar(12),new_shipping_address varchar(45))
