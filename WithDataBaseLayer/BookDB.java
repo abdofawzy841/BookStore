@@ -1,0 +1,38 @@
+package DataBase;
+import Entities.*;
+
+public class BookDB {
+    // here you create a book object and send it to this fun
+    public void insertBook(Book b, String userName, String password) {
+        try {
+            String q = "call addNewBook(\"" + userName + "\",\"" + password + "\","
+                    + b.getISBN() + ",\"" + b.getTitle() + "\"," + b.getPublisherId()
+                    + ",\"" + b.getPublication_year() + "\",\"" + b.getPrice() +
+                    "\"," + b.getCategory_id() + "," + b.getMin_quantity() + ","
+                    + b.getCur_quantity() + ")";
+
+            System.out.println(q);
+            DataBase.executeQuery(q);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    // here you create a new book object and send it to this fun
+    public void updateBookDate(String userName, String password, Book newBook){
+        try {
+            String q = "call modifyBook(\"" + userName + "\",\"" + password + "\","
+                    + newBook.getISBN() + ",\"" + newBook.getTitle() + "\"," + newBook.getPublisherId()
+                    + ",\"" + newBook.getPublication_year() + "\",\"" + newBook.getPrice() +
+                    "\"," + newBook.getCategory_id() + "," + newBook.getMin_quantity() + ","
+                    + newBook.getCur_quantity() + ")";
+
+            System.out.println(q);
+            DataBase.executeQuery(q);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+}
