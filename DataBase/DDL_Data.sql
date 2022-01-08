@@ -3,7 +3,6 @@ USE BookStore ;
 -- -----------------------------------------------------
 -- Table `BookStore`.`publisher`
 -- -----------------------------------------------------
-
   CREATE TABLE  IF NOT EXISTS  publisher(
 	publisher_id INTEGER PRIMARY KEY,
     name VARCHAR(45) NOT NULL,
@@ -60,7 +59,7 @@ CREATE TABLE  IF NOT EXISTS book_author(
     PRIMARY KEY(book_ISBN,author_id),
     FOREIGN KEY(book_ISBN) REFERENCES book(ISBN) 
 				ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY(author_id) REFERENCES author(author_id) 
+    FOREIGN KEY(author_id) REFERENCES author(id) 
 				ON UPDATE CASCADE ON DELETE CASCADE
 );
 
