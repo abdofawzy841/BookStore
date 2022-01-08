@@ -1,4 +1,3 @@
-
 USE `bookstore`;
 DROP function IF EXISTS `isManager`;
 DELIMITER $$
