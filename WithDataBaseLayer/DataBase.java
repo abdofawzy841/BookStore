@@ -3,6 +3,7 @@ package DataBase;
 import java.sql.*;
 import Entities.*;
 import java.util.*;
+import javafx.util.*;
 
 public class DataBase {
     private static Connection con;
@@ -23,8 +24,7 @@ public class DataBase {
         }
     }
 
-    public static void executeQuery(String q) throws SQLException { // for normal Queries
-
+    public static void executeQuery(String q) { // for normal Queries
         try {
             connect();
             con.createStatement().executeQuery(q);
@@ -32,7 +32,6 @@ public class DataBase {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
     }
 
     public static ArrayList<Book> executeQueriesForBooks(String q) {
@@ -95,6 +94,23 @@ public class DataBase {
             ResultSet r = con.createStatement().executeQuery(q);
             while (r.next()) {
                 list.add(r.getDouble(1));
+            }
+            con.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return list;
+    }
+
+    public static ArrayList<Pair<String, Integer>> executeQueriesForEnt(String q){
+        ArrayList<Pair<String, Integer>> list = new ArrayList<>();
+
+        try {
+            connect();
+            ResultSet r = con.createStatement().executeQuery(q);
+            while (r.next()) {
+                list.add(new Pair(r.getString(1), r.getInt(2)));
             }
             con.close();
         } catch (Exception e) {
