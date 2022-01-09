@@ -34,22 +34,24 @@ END$$
 DELIMITER ;
 
 
-USE `bookstore`;
-DROP function IF EXISTS `signUp`;
+USE bookstore;
+DROP function IF EXISTS signUp;
 DELIMITER $$
-USE `bookstore`$$
+USE bookstore$$
 CREATE FUNCTION signUp (userName varchar(45), password varchar(15),
-					 last_name varchar(45), first_name varchar(45), email varchar(45), 
-					 phone varchar(12),shipping_address varchar(45))
+                     last_name varchar(45), first_name varchar(45), email varchar(45), 
+                     phone varchar(12),shipping_address varchar(45))
  RETURNS boolean
 BEGIN
     IF userName in (select user_name from user) THEN
-    return false;
+		return false;
+	ELSEIF email in (select email_address from user) THEN
+		return false;
     ELSE 
-    INSERT INTO user values(user_name, password, last_name, first_name, email, phone,shipping_address,false);
-			RETURN true;
-	END IF;
-	
+    INSERT INTO user values(userName, password, last_name, first_name, email, phone,shipping_address,false);
+            RETURN true;
+    END IF;
+
 END$$
 DELIMITER ;
 
@@ -64,15 +66,15 @@ BEGIN
 END$$
 DELIMITER ;
 
-
-USE `bookstore`;
-DROP procedure IF EXISTS `getUser`;
+USE bookstore;
+DROP procedure IF EXISTS getUser;
 DELIMITER $$
-USE `bookstore`$$
+
+USE bookstore$$
 CREATE PROCEDURE getUser (userName varchar(45))
 BEGIN
-		SELECT*
+        SELECT*
         FROM user 
-		WHERE user_name = userName;
+        WHERE user_name = userName;
 END$$
 DELIMITER ;

@@ -16,7 +16,7 @@ USE BookStore ;
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS category(
-	id INTEGER PRIMARY KEY AUTO_INCREMENT,
+	id INTEGER PRIMARY KEY,
     name VARCHAR(45) UNIQUE NOT NULL
 );
 

@@ -8,7 +8,7 @@ public class User {
     private String email_address;
     private String phone;
     private String shipping_address;
-    private boolean is_man; // 1 for man >> 0 for normal user
+    private boolean is_manager; // 1 for man >> 0 for normal user
 
     public User(String user_name, String password, String last_name,
                 String first_name, String email_address, String phone,
@@ -20,8 +20,10 @@ public class User {
         this.email_address = email_address;
         this.phone = phone;
         this.shipping_address = shipping_address;
-        this.is_man = is_man;
+        this.is_manager = is_man;
     }
+    
+    public User () {}
 
 
     public String getUser_name() {
@@ -80,11 +82,11 @@ public class User {
         this.shipping_address = shipping_address;
     }
 
-    public boolean isIs_man() {
-        return is_man;
+    public boolean isManager() {
+        return is_manager;
     }
 
-    public void setIs_man(boolean is_man) {
-        this.is_man = is_man;
+    public void setManager(boolean is_man) {
+        this.is_manager = is_man;
     }
 }

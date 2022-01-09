@@ -1,7 +1,8 @@
-package DataBase;
+package WithDataBaseLayer;
 import Entities.*;
 
 public class BookDB {
+	DataBase DBM = new DataBase();
     // here you create a book object and send it to this fun
     public void insertBook(Book b, String userName, String password) {
         String q = "call addNewBook(\"" + userName + "\",\"" + password + "\","
@@ -10,7 +11,7 @@ public class BookDB {
                 "\"," + b.getCategory_id() + "," + b.getMin_quantity() + ","
                 + b.getCur_quantity() + ")";
 
-        DataBase.executeQuery(q);
+        DBM.executeQuery(q);
     }
     // here you create a new book object and send it to this fun
     public void updateBookDate(String userName, String password, Book newBook){
@@ -20,6 +21,6 @@ public class BookDB {
                 "\"," + newBook.getCategory_id() + "," + newBook.getMin_quantity() + ","
                 + newBook.getCur_quantity() + ")";
 
-        DataBase.executeQuery(q);
+       DBM.executeQuery(q);
     }
 }

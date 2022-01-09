@@ -7,10 +7,9 @@ create procedure searchForBookByISBN (search_ISBN integer)
 BEGIN
   select * 
   from book 
-  where search_ISBN =ISBN;
+  where search_ISBN = ISBN;
 END$$
 DELIMITER ;
-
 
 
 USE `bookstore`;
@@ -19,9 +18,9 @@ DELIMITER $$
 USE `bookstore`$$
 create procedure searchForBookByTitle (search_title VARCHAR(45))
 BEGIN
-  select * 
+  select *
   from book 
-  where search_title =title;
+  where title LIKE search_title;
 END$$
 DELIMITER ;
 
@@ -34,9 +33,10 @@ create procedure searchForBookByCategory (categoryName VARCHAR(45))
 BEGIN
   select * 
   from book 
-  where category_id = (select id 
+  where category_id in (select id 
 					  from category
-                      where name = categoryName);
+                      where name  Like categoryName );
+
 END$$
 DELIMITER ;
 
@@ -53,7 +53,7 @@ Where ISBN in(select book_ISBN
                from book_author
                where author_id in (select id
                                     from author
-                                    where name=authorName));
+                                    where name LIKE authorName));
 
 END$$
 DELIMITER ;
@@ -70,7 +70,7 @@ BEGIN
   from book 
   where publisher_id = (select publisher_id 
 					  from publisher
-                      where name = publisherName);
+                      where name LIKE publisherName );
 END$$
 DELIMITER ;
 
@@ -81,14 +81,16 @@ DELIMITER ;
 */
 
 USE `bookstore`;
-DROP procedure IF EXISTS `editUserInfo`;
+DROP function IF EXISTS `editUserInfo`;
 DELIMITER $$
 USE `bookstore`$$
-CREATE PROCEDURE editUserInfo(userName varchar(45),
+CREATE function editUserInfo(userName varchar(45),
 					 new_user_name varchar(45), new_password varchar(15),
 					 new_last_name varchar(45), new_first_name varchar(45), new_email varchar(45), 
 					 new_phone varchar(12),new_shipping_address varchar(45))
+returns boolean
 BEGIN
+
 			UPDATE user
 			SET user_name = new_user_name,
 				password = new_password, 
@@ -98,6 +100,7 @@ BEGIN
                 phone = new_phone,
 				shipping_address = new_shipping_address
 			WHERE user_name = userName;
+            return true;
 END$$
 DELIMITER ;
 
@@ -114,9 +117,15 @@ USE `bookstore`$$
 CREATE FUNCTION addBookToShoppingCart (userName varchar(45),bookISBN INTEGER,numofbooks INTEGER)
 RETURNS BOOLEAN
 BEGIN
-		IF bookNumber in (select ISBN from book) THEN
+		IF bookISBN in (select ISBN from book) THEN
+			IF bookISBN in (select book_ISBN from cart where user_name = userName)
+			THEN
+				Update cart set num_copies = num_copies +  numofbooks where book_ISBN = bookISBN;
+				return true;
+            else
 			INSERT INTO cart (book_ISBN ,user_name,num_copies) VALUES (bookISBN, userName,numofbooks);
             RETURN TRUE;
+			END IF;
 		END IF;
 RETURN FALSE;
 END$$
@@ -176,10 +185,10 @@ DELIMITER $$
 USE `bookstore`$$
 CREATE PROCEDURE viewCartPrice (userName varchar(45))
 BEGIN
-			SELECT SUM(b.price) total_price 
+			SELECT SUM(b.price*s.num_copies) total_price 
             FROM book b 
             JOIN (
-				SELECT book_ISBN 
+				SELECT book_ISBN, num_copies
                 FROM cart
                 WHERE user_name = userName
             ) s 
@@ -214,26 +223,68 @@ DELIMITER ;
 * buy book
 */
 USE `bookstore`;
-DROP procedure IF EXISTS `buyBook`;
+DROP function IF EXISTS `buyBook`;
 DELIMITER $$
 USE `bookstore`$$
-CREATE PROCEDURE `buyBook`(userName varchar(45),
-							bookISBN INTEGER, book_price double,CardNumber varchar(16),expireDate DATE)
+CREATE function `buyBook`(userName varchar(45),
+							bookISBN INTEGER, book_price double,CardNumber varchar(16),expireDate DATE) returns boolean
 BEGIN
 	DECLARE copies INTEGER;
 		IF(bookISBN in (SELECT ISBN from book)) THEN
 			SET copies = (
             select num_copies 
             from cart 
-            where user_name = userName and book_ISBN = bookISBN limit 1
+            where user_name = userName and book_ISBN = bookISBN
             );
-			insert into sale values (bookISBN,CardNumber,userName,now(),
-									  copies,expireDate);
             update book set cur_quantity = cur_quantity - copies where ISBN = bookISBN;
+			insert into sale values (bookISBN,CardNumber,userName,now(),
+									  copies,book_price,expireDate);
             DELETE FROM cart where user_name = userName AND book_ISBN=bookISBN ;
+            return true;
         END IF;
+        return false;
 END$$
 DELIMITER ;
+
+USE `bookstore`;
+DROP procedure IF EXISTS `getCategory`;
+DELIMITER $$
+USE `bookstore`$$
+CREATE PROCEDURE getCategory (category_id integer)
+BEGIN
+		SELECT name
+        FROM category 
+		WHERE id = category_id;
+END$$
+DELIMITER ;
+
+
+
+USE `bookstore`;
+DROP procedure IF EXISTS `getPublisher`;
+DELIMITER $$
+USE `bookstore`$$
+CREATE PROCEDURE getPublisher (Publisher_id integer)
+BEGIN
+		SELECT name
+        FROM publisher 
+		WHERE id = Publisher_id;
+END$$
+DELIMITER ;
+
+USE `bookstore`;
+DROP procedure IF EXISTS `getAuthor`;
+DELIMITER $$
+USE `bookstore`$$
+CREATE PROCEDURE getAuthor (author_id integer)
+BEGIN
+		SELECT name
+        FROM author 
+		WHERE id = author_id;
+END$$
+DELIMITER ;
+
+
 
 
 

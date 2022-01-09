@@ -1,15 +1,18 @@
 USE `bookstore`;
-DROP procedure IF EXISTS `addNewBook`;
+SET GLOBAL log_bin_trust_function_creators = 1;
+DROP function IF EXISTS `addNewBook`;
 DELIMITER $$
 USE `bookstore`$$
-CREATE procedure addNewBook(ISBN INTEGER ,title VARCHAR(45) ,
+CREATE function addNewBook(ISBN INTEGER ,title VARCHAR(45) ,
 							publisher_id INTEGER,publication_year year,
                             price double,category_id integer,
                             min_quantity INTEGER , quantity integer)
+                            returns boolean
 BEGIN
 			INSERT INTO BOOK 
             VALUES( ISBN,title,publisher_id,publication_year,
 					price ,category_id,min_quantity ,quantity);
+			return true;
 END$$
 DELIMITER ;
 

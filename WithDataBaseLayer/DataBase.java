@@ -1,4 +1,4 @@
-package DataBase;
+package WithDataBaseLayer;
 
 import java.sql.*;
 import Entities.*;
@@ -6,25 +6,25 @@ import java.util.*;
 import javafx.util.*;
 
 public class DataBase {
-    private static Connection con;
-    private static final String dpUrl = "jdbc:mysql://sql11.freemysqlhosting.net:3306/sql6464024"; // to be modified
-    private static final String user = "sql6464024";
-    private static final String pass = "rquwbq7YLg";
+    private Connection con;
+    private final String dpUrl = "jdbc:mysql://localhost:3306/bookstore"; // to be modified
+    private final String user = "root";
+    private final String pass = "1200";
 
-    private DataBase() {
+    public DataBase() {
         connect();
     }
 
-    private static void connect() {
+    private  void connect() {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection(dpUrl, user, pass);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public static void executeQuery(String q) { // for normal Queries
+    public  void executeQuery(String q) { // for normal Queries
         try {
             connect();
             con.createStatement().executeQuery(q);
@@ -34,7 +34,7 @@ public class DataBase {
         }
     }
 
-    public static ArrayList<Book> executeQueriesForBooks(String q) {
+    public  ArrayList<Book> executeQueriesForBooks(String q) {
         ArrayList<Book> list = new ArrayList<>();
 
         try {
@@ -52,8 +52,25 @@ public class DataBase {
 
         return list;
     }
+    
+    public  User executeUserQuery(String q) {
+    	User user = new User();
+        try {
+            connect();
+            ResultSet r = con.createStatement().executeQuery(q);
+            while (r.next()) {
+                user = new User(r.getString(1),r.getString(2),r.getString(3),r.getString(4),
+                		r.getString(5),r.getString(6), r.getString(7),r.getBoolean(8));
+            }
+            con.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
-    public static boolean executeBooleanQueries(String q){
+        return user;
+    }
+
+    public boolean executeBooleanQueries(String q){
         boolean ans = false;
 
         try {
@@ -64,12 +81,13 @@ public class DataBase {
             con.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            return false;
         }
 
         return ans;
     }
 
-    public static double executeDoubleQueries(String q){
+    public  double executeDoubleQueries(String q){
         double ans = 0.0;
 
         try {
@@ -86,7 +104,7 @@ public class DataBase {
     }
 
 
-    public static ArrayList<Double> executeQueriesForDoubles(String q) {
+    public  ArrayList<Double> executeQueriesForDoubles(String q) {
         ArrayList<Double> list = new ArrayList<>();
 
         try {
@@ -103,14 +121,14 @@ public class DataBase {
         return list;
     }
 
-    public static ArrayList<Pair<String, Integer>> executeQueriesForEnt(String q){
+    public  ArrayList<Pair<String, Integer>> executeQueriesForEnt(String q){
         ArrayList<Pair<String, Integer>> list = new ArrayList<>();
 
         try {
             connect();
             ResultSet r = con.createStatement().executeQuery(q);
             while (r.next()) {
-                list.add(new Pair(r.getString(1), r.getInt(2)));
+                list.add(new Pair<String, Integer>(r.getString(1), r.getInt(2)));
             }
             con.close();
         } catch (Exception e) {
