@@ -132,10 +132,9 @@ declare number_sales int;
                 FROM sale 
                 WHERE sale_time  >= DATE_ADD(NOW(),INTERVAL -30 DAY)
                 GROUP BY book_ISBN
-                			Order BY number_sales DESC
             ) s
-            on s.book_ISBN = b.ISBN;
-            
+            on s.book_ISBN = b.ISBN
+			Order BY s.number_sales DESC;
 END$$
 DELIMITER ;
 
