@@ -2,8 +2,9 @@ package WithDataBaseLayer;
 
 import java.sql.*;
 import Entities.*;
+import javafx.util.Pair;
+
 import java.util.*;
-import javafx.util.*;
 
 public class DataBase {
     private Connection con;
@@ -120,15 +121,14 @@ public class DataBase {
 
         return list;
     }
-
-    public  ArrayList<Pair<String, Integer>> executeQueriesForEnt(String q){
-        ArrayList<Pair<String, Integer>> list = new ArrayList<>();
-
+    
+    public  ArrayList<Tuple> executeQueriesForTuple(String q) {
+        ArrayList<Tuple> list = new ArrayList<>();
         try {
             connect();
             ResultSet r = con.createStatement().executeQuery(q);
             while (r.next()) {
-                list.add(new Pair<String, Integer>(r.getString(1), r.getInt(2)));
+                list.add(new Tuple(r.getInt(1), r.getString(2)));
             }
             con.close();
         } catch (Exception e) {
@@ -137,5 +137,65 @@ public class DataBase {
 
         return list;
     }
+    
+    public  Book executeBookQuery(String q) {
+    	Book b = null;
+    	try {
+            connect();
+            ResultSet r = con.createStatement().executeQuery(q);
+            while (r.next()) {
+            	b = new Book(r.getInt(1), r.getString(2),
+                        r.getInt(3), r.getString(4), r.getDouble(5),
+                        r.getInt(6), r.getInt(7), r.getInt(8));
+            }
+            con.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+
+        return b;
+    }
+    
+    public ArrayList<Order> executeOrdersQuerey(String q){
+    	ArrayList<Order> list = new ArrayList<Order>();
+    	try {
+            connect();
+            ResultSet r = con.createStatement().executeQuery(q);
+            while (r.next()) {
+                list.add(new Order(r.getInt(1), r.getInt(2), r.getInt(3)));
+            }
+            con.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return list;
+    	
+    }
+    
+    public  ArrayList<Pair<Book,Integer>> executeCartQuery(String q) {
+    	ArrayList<Pair<Book,Integer>> list = new ArrayList<>();
+    	try {
+            connect();
+            ResultSet r = con.createStatement().executeQuery(q);
+            while (r.next()) {
+            	Book b = new Book(r.getInt(1), r.getString(2),
+                        r.getInt(3), r.getString(4), r.getDouble(5),
+                        r.getInt(6), r.getInt(7), r.getInt(8));
+            	int count = r.getInt(9);
+            	Pair<Book,Integer> pair = new Pair<Book, Integer>(b, count);
+            	list.add(pair);
+            }
+            con.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+
+        return list;
+    }
+    
+    
 }
 

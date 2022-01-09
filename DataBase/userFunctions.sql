@@ -142,9 +142,9 @@ DELIMITER $$
 USE `bookstore`$$
 CREATE PROCEDURE viewCartItems(userName varchar(45))
 BEGIN
-		SELECT b.* FROM book b 
+		SELECT b.* , num_copies FROM book b 
         JOIN ( 
-			SELECT book_ISBN 
+			SELECT book_ISBN, num_copies
             FROM cart
             WHERE user_name = userName
             ) s

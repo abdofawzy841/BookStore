@@ -1,8 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17" fx:controller="application.AddBookController">
-	<!-- TODO Add Nodes -->
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="450.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.AddBookController">
+   <children>
+      <Text layoutX="280.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ADD BOOKS">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Text>
+      <TextField fx:id="ISBN" layoutX="160.0" layoutY="70.0" prefHeight="25.0" prefWidth="350.0" />
+      <TextField fx:id="title" layoutX="160.0" layoutY="110.0" prefHeight="25.0" prefWidth="350.0" />
+      <TextField fx:id="year" layoutX="160.0" layoutY="190.0" prefHeight="25.0" prefWidth="350.0" />
+      <TextField fx:id="price" layoutX="160.0" layoutY="270.0" prefHeight="25.0" prefWidth="350.0" />
+      <Label layoutX="25.0" layoutY="70.0" text="ISBN :">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="25.0" layoutY="110.0" text="Title :" textAlignment="CENTER">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="25.0" layoutY="190.0" text="Publication Year : ">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="25.0" layoutY="150.0" text="Publisher :">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
+      <ChoiceBox fx:id="category" layoutX="160.0" layoutY="230.0" prefHeight="25.0" prefWidth="190.0" />
+      <Label layoutX="25.0" layoutY="230.0" text="Category :">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="25.0" layoutY="270.0" text="Selling Price :">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="25.0" layoutY="310.0" text="Current Quantity :">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
+      <TextField fx:id="quantity" layoutX="160.0" layoutY="310.0" prefHeight="25.0" prefWidth="350.0" />
+      <TextField fx:id="minQuantity" layoutX="160.0" layoutY="350.0" prefHeight="25.0" prefWidth="350.0" />
+      <Label layoutX="25.0" layoutY="350.0" text="Min Quantity :">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
+      <Text fx:id="dataError" fill="RED" layoutX="317.0" layoutY="430.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Invalid Data" underline="true" visible="false" wrappingWidth="79.3515625">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Text>
+      <Button fx:id="addBookBtn" layoutX="598.0" layoutY="407.0" mnemonicParsing="false" onAction="#addBook" text="Add Book">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
+      <ChoiceBox fx:id="publisher" layoutX="160.0" layoutY="148.0" prefHeight="25.0" prefWidth="190.0" />
+      <Label layoutX="25.0" layoutY="385.0" text="Author: ">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
+      <ChoiceBox fx:id="author" layoutX="160.0" layoutY="383.0" prefHeight="25.0" prefWidth="190.0" />
+      <Text fx:id="success" fill="#04a411" layoutX="327.0" layoutY="440.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Insertion Successful" underline="true" visible="false" wrappingWidth="79.3515625">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Text>
+      <Button fx:id="homeBtn" mnemonicParsing="false" onAction="#returnToHome" text="Home" />
+   </children>
 </AnchorPane>

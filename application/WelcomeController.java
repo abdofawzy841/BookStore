@@ -13,56 +13,53 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
 public class WelcomeController extends SceneSwitchController {
-	
+
 	private User user = new User();
 	private UserDB userManager = new UserDB();
 	private Pattern NumberPattern = Pattern.compile("-?\\d+(\\.\\d+)?");
-    private Pattern EmailPattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
+	private Pattern EmailPattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
 
+	@FXML
+	private PasswordField confirmPassword;
 
-	
+	@FXML
+	private TextField email;
 
-    @FXML
-    private PasswordField confirmPassword;
+	@FXML
+	private TextField firstName;
 
-    @FXML
-    private TextField email;
+	@FXML
+	private TextField lastName;
 
-    @FXML
-    private TextField firstName;
+	@FXML
+	private Button logInBtn;
 
-    @FXML
-    private TextField lastName;
+	@FXML
+	private Text logInError;
 
-    @FXML
-    private Button logInBtn;
+	@FXML
+	private PasswordField logInPassword;
 
-    @FXML
-    private Text logInError;
+	@FXML
+	private TextField logInUserName;
 
-    @FXML
-    private PasswordField logInPassword;
+	@FXML
+	private PasswordField password;
 
-    @FXML
-    private TextField logInUserName;
+	@FXML
+	private TextField shippingAddress;
 
-    @FXML
-    private PasswordField password;
+	@FXML
+	private Button signUpBtn;
 
-    @FXML
-    private TextField shippingAddress;
+	@FXML
+	private Text signUpError;
 
-    @FXML
-    private Button signUpBtn;
+	@FXML
+	private TextField userName;
 
-    @FXML
-    private Text signUpError;
-
-    @FXML
-    private TextField userName;
-
-    @FXML
-    private TextField phone;
+	@FXML
+	private TextField phone;
 
 	@FXML
 	void logIn(ActionEvent event) {
@@ -73,9 +70,9 @@ public class WelcomeController extends SceneSwitchController {
 			logInError.setText("");
 			user = userManager.getUser(user.getUser_name());
 			if (user.isManager()) {
-				changeScene(event,"ManagerHomeScene.fxml");
+				changeScene(event, "ManagerHomeScene.fxml");
 			} else {
-				changeScene(event,"CustomerHomeScene.fxml");
+				changeScene(event, "CustomerHomeScene.fxml");
 			}
 
 		} else {
@@ -87,15 +84,15 @@ public class WelcomeController extends SceneSwitchController {
 	void signUp(ActionEvent event) {
 		// check sign up result and either send him to another scene or display error
 		// message
-		if(!NumberPattern.matcher(phone.getText()).matches()) {
+		if (!NumberPattern.matcher(phone.getText()).matches()) {
 			signUpError.setText("Invalid Phone Number");
 			return;
 		}
-		if(!EmailPattern.matcher(email.getText()).matches()) {
+		if (!EmailPattern.matcher(email.getText()).matches()) {
 			signUpError.setText("Invalid Email Address");
 			return;
 		}
-		if(!password.getText().equals(confirmPassword.getText())) {
+		if (!password.getText().equals(confirmPassword.getText())) {
 			signUpError.setText("Passwords Don't Match");
 			return;
 		}
@@ -109,27 +106,25 @@ public class WelcomeController extends SceneSwitchController {
 		user.setPhone(phone.getText());
 		user.setManager(false);
 
-		if(userManager.signUp(user)) {
+		if (userManager.signUp(user)) {
 			signUpError.setText("");
-			changeScene(event,"CustomerHomeScene.fxml");
+			changeScene(event, "CustomerHomeScene.fxml");
 		} else {
 			signUpError.setText("Error during Sign up please choose another username or email");
 		}
 	}
-	
-    @Override
-    public void initController(FXMLLoader loader){
-    	 if(user.getUser_name() != null) {
-    		 if(!user.isManager()){
-                 CustomerHomeController controller = loader.getController();
-                 controller.initData(this.user);
-            }else{
-                 ManagerHomeController controller = loader.getController();
-                 controller.initData(this.user);
-            }
-    	 }
-    }
-    
-	
+
+	@Override
+	public void initController(FXMLLoader loader) {
+		if (user.getUser_name() != null) {
+			if (!user.isManager()) {
+				CustomerHomeController controller = loader.getController();
+				controller.initData(this.user);
+			} else {
+				ManagerHomeController controller = loader.getController();
+				controller.initData(this.user);
+			}
+		}
+	}
 
 }

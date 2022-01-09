@@ -5,7 +5,7 @@ USE BookStore ;
 -- -----------------------------------------------------
   CREATE TABLE  IF NOT EXISTS  publisher(
 	publisher_id INTEGER PRIMARY KEY,
-    name VARCHAR(45) NOT NULL,
+    name VARCHAR(45) UNIQUE NOT NULL,
     address VARCHAR(45),
     phone VARCHAR(12)
 );
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS book(
 
 CREATE TABLE IF NOT EXISTS author(
 	id INTEGER PRIMARY KEY,
-    name VARCHAR(45) NOT NULL
+    name VARCHAR(45) UNIQUE NOT NULL
 );
 
 -- -----------------------------------------------------
@@ -159,7 +159,7 @@ DELIMITER $$
 USE `bookstore`$$
 CREATE DEFINER = CURRENT_USER TRIGGER `BookStore`.`orders_BEFORE_DELETE` BEFORE DELETE ON `orders` FOR EACH ROW
 BEGIN
-update book set cur_quantity = cur_quantity + old.copies_num where ISBN = old.book.ISBN;
+update book set cur_quantity = cur_quantity + old.copies_num where ISBN = old.book_ISBN;
 END$$
 DELIMITER ;
 

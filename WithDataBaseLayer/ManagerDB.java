@@ -1,64 +1,90 @@
 package WithDataBaseLayer;
+
 import Entities.*;
-import javafx.util.Pair;
 
 import java.util.ArrayList;
 
 public class ManagerDB {
 	private DataBase DBM = new DataBase();
 
-    public boolean isManager(User u) {
-        String q = "call isManager(\"" + u.getUser_name() + "\")";
-        System.out.println(q);
-        return DBM.executeBooleanQueries(q);
-    }
+	public boolean isManager(User u) {
+		String q = "call isManager(\"" + u.getUser_name() + "\")";
+		return DBM.executeBooleanQueries(q);
+	}
 
-    public void addNewBook(int ISBN, String title) {
-        String q = "call addNewBook(\"" + ISBN + "\",\"" + title + "\")";
-        System.out.println(q);
-        DBM.executeQuery(q);
-    }
+	public boolean addNewBook(Book newBook, int authorId) {
+		String q = "select addNewBook(" + newBook.getISBN() + ",\"" + newBook.getTitle() + "\","
+				+ newBook.getPublisherId() + ",\"" + newBook.getPublication_year() + "\"," + newBook.getPrice() + ","
+				+ newBook.getCategory_id() + "," + newBook.getMin_quantity() + "," + newBook.getCur_quantity() + ","
+				+ authorId + ")";
+		return DBM.executeBooleanQueries(q);
+	}
 
-    public boolean modifyBook(int ISBN, Book newBook){
-        String q = "call modifyBook(\"" + ISBN + "\",\"" + newBook.getTitle() + "\","
-                + newBook.getPublisherId() + "\"," + newBook.getPublication_year()
-                + "\"," + newBook.getPrice() + "\"," + newBook.getCategory_id() + "\","
-                + newBook.getMin_quantity() + "\"," + newBook.getCur_quantity() + "\")";
-        System.out.println(q);
-        return DBM.executeBooleanQueries(q);
-    }
+	public boolean modifyBook(Book newBook) {
+		String q = "select modifyBook(" + newBook.getISBN() + ",\"" + newBook.getTitle() + "\","
+				+ newBook.getPublisherId() + ",\"" + newBook.getPublication_year() + "\"," + newBook.getPrice() + ","
+				+ newBook.getCategory_id() + "," + newBook.getMin_quantity() + "," + newBook.getCur_quantity() + ")";
+		return DBM.executeBooleanQueries(q);
+	}
 
-    public void orderBook(int ISBN, int quantity){
-        String q = "call orderBooks(\"" + ISBN + "\",\"" + quantity + "\")";
-        System.out.println(q);
-        DBM.executeQuery(q);
-    }
+	public boolean orderBook(int ISBN, int quantity) {
+		String q = "select orderBooks(\"" + ISBN + "\",\"" + quantity + "\")";
+		return DBM.executeBooleanQueries(q);
+	}
 
-    public void confirmOrder(int orderId) {
-        String q = "call orderBooks(\"" + orderId + "\")";
-        DBM.executeQuery(q);
-    }
+	public boolean confirmOrder(int orderId) {
+		String q = "select confirmOrder("+ orderId + ")";
+		return DBM.executeBooleanQueries(q);
+	}
 
-    public void setManager(String userName){
-        String q = "call orderBooks(\"" + userName + "\")";
-        DBM.executeQuery(q);
-    }
+	public boolean setManager(String userName) {
+		String q = "select setManager(\"" + userName + "\")";
+		return DBM.executeBooleanQueries(q);
+	}
+	
+	public boolean setCustomer(String userName) {
+		String q = "select setCustomer(\"" + userName + "\")";
+		return DBM.executeBooleanQueries(q);
+	}
 
-    public ArrayList<Pair<String,Integer>> totalBooksSales (){
-        String q = "call totalBooksSales()";
-        return DBM.executeQueriesForEnt(q);
-    }
+	public ArrayList<Tuple> totalBooksSales() {
+		String q = "call totalBooksSales()";
+		return DBM.executeQueriesForTuple(q);
+	}
 
-    public ArrayList<Pair<String,Integer>> topCustomers (){
-        String q = "call topCustomers()";
-        return DBM.executeQueriesForEnt(q);
-    }
+	public ArrayList<Tuple> topCustomers() {
+		String q = "call topCustomers()";
+		return DBM.executeQueriesForTuple(q);
+	}
 
-    public ArrayList<Pair<String,Integer>> topSellingBooks(){
-        String q = "call topSellingBooks()";
-        return DBM.executeQueriesForEnt(q);
-    }
+	public ArrayList<Tuple> topSellingBooks() {
+		String q = "call topSellingBooks()";
+		return DBM.executeQueriesForTuple(q);
+	}
 
+	public ArrayList<Tuple> getCategories() {
+		String q = "call getCategories()";
+		return DBM.executeQueriesForTuple(q);
+	}
 
+	public ArrayList<Tuple> getPublishers() {
+		String q = "call getPublishers()";
+		return DBM.executeQueriesForTuple(q);
+	}
+
+	public ArrayList<Tuple> getAuthors() {
+		String q = "call getAuthors()";
+		return DBM.executeQueriesForTuple(q);
+	}
+
+	public Book getBook(int ISBN) {
+		String q = "call getBook (" + ISBN + ")";
+		return DBM.executeBookQuery(q);
+	}
+
+	public ArrayList<Order> getOrders() {
+		String q = "call getOrders()";
+		return DBM.executeOrdersQuerey(q);
+	}
 
 }

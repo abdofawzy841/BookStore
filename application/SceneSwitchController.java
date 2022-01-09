@@ -18,7 +18,7 @@ public class SceneSwitchController {
 			loader.setLocation(getClass().getResource(path));
 			Parent newRoot;
 			newRoot = loader.load();
-			
+
 			initController(loader);
 
 			Scene scene = new Scene(newRoot);

@@ -48,5 +48,20 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </Text>
+      <Text fx:id="saleError" fill="RED" layoutX="21.0" layoutY="326.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Something went Wrong while confirming you order,Please contact a manager." textAlignment="CENTER" underline="true" visible="false" wrappingWidth="174.623046875">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Text>
+      <Text fx:id="removeSuccess" fill="#03b703" layoutX="50.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Removed From Cart!" underline="true" visible="false">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Text>
+      <Text fx:id="removeError" fill="RED" layoutX="35.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Something Went Wrong" underline="true" visible="false">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>

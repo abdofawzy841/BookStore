@@ -16,6 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.util.Pair;
 
 public class CartController extends SceneSwitchController {
 
@@ -23,12 +24,16 @@ public class CartController extends SceneSwitchController {
 	private String destination;
 	private UserDB userManager = new UserDB();
 	private Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
-	private ArrayList<Book> booksInCart = new ArrayList<>();
+	private ArrayList<Pair<Book,Integer>> booksInCart = new ArrayList<>();
 
+	@FXML
+	private Text removeError;
 
-    @FXML
-    private VBox booksTable;
-    
+	@FXML
+	private Text removeSuccess;
+	@FXML
+	private VBox booksTable;
+
 	@FXML
 	private TextField cardNo;
 
@@ -42,40 +47,51 @@ public class CartController extends SceneSwitchController {
 	private Text price;
 
 	@FXML
+	private Text success;
+
+	@FXML
 	private TextField year;
 
 	@FXML
+	private Text saleError;
+
+	@FXML
 	void confirmOrder(ActionEvent event) {
+		removeError.setVisible(false);
+		removeSuccess.setVisible(false);
+		infoError.setVisible(false);
+		success.setVisible(false);
+		saleError.setVisible(false);
+
 		if (checkCardInfo()) {
-			infoError.setVisible(false);
 			int m = Integer.parseInt(month.getText());
 			int y = Integer.parseInt(year.getText());
 			LocalDate date = LocalDate.of(y, m, 1);
 			boolean saleDone = true;
-			for(Book book : booksInCart) {
-				if(!
-				userManager.buyBook(user, book.getISBN(), book.getPrice(), cardNo.getText(), date)) {
-					System.out.println("SALE NOT COMPLETE");
+			for(int i=0;i<booksInCart.size();i++) {
+				Book book = booksInCart.get(i).getKey();
+				if (!userManager.buyBook(user, book.getISBN(), book.getPrice(), cardNo.getText(), date)) {
+					saleError.setVisible(true);
 					saleDone = false;
 				}
-	
+
 			}
-			if(saleDone) {
-				System.out.println("success");
-				//TODO
-				//show success message
+			if (saleDone) {
+				success.setVisible(true);
+				initData(user);
+			} else {
+				infoError.setVisible(true);
 				initData(user);
 			}
-		}
-		else {
+		} else {
 			infoError.setVisible(true);
 		}
 	}
 
 	private boolean checkCardInfo() {
-		if(!pattern.matcher(cardNo.getText()).matches())
+		if (!pattern.matcher(cardNo.getText()).matches())
 			return false;
-		if(!(cardNo.getText().length() == 16))
+		if (!(cardNo.getText().length() == 16))
 			return false;
 		try {
 			int m = Integer.parseInt(month.getText());
@@ -84,13 +100,12 @@ public class CartController extends SceneSwitchController {
 				return false;
 
 			LocalDate date = LocalDate.of(y, m, 1);
-		    LocalDate today = LocalDate.now();
-		    if(today.isAfter(date))
-		    	return false;
+			LocalDate today = LocalDate.now();
+			if (today.isAfter(date))
+				return false;
 		} catch (Exception e) {
 			return false;
 		}
-
 		return true;
 	}
 
@@ -112,36 +127,46 @@ public class CartController extends SceneSwitchController {
 		double totalPrice = userManager.viewCartPrice(user);
 		price.setText(Double.toString(totalPrice) + " $");
 	}
-	
+
 	private void showCart() {
 		booksTable.getChildren().clear();
-    	String cssLayout = "-fx-border-color: red;\n" +
-                "-fx-border-insets: 5;\n" +
-                "-fx-border-width: 3;\n" +
-                "-fx-border-style: dashed;\n" + 
-                "-fx-padding : 10 ; \n";
-    	booksTable.setStyle(cssLayout); 
-    	for(Book book:booksInCart) {
-    		HBox box = new HBox(20);
-    		Text text = new Text("Title : " + book.getTitle());
-    		Text price = new Text("price : " + book.getPrice());
-    		Button remove = new Button("Remove");
-    		remove.setOnAction(new EventHandler<ActionEvent>() {
+		String cssLayout = "-fx-border-color: blue;\n" + "-fx-border-insets: 3;\n" + "-fx-border-width: 1;\n"
+				+ "-fx-border-style: solid;\n" + "-fx-padding : 10 ; \n";
+		for(int i=0;i<booksInCart.size();i++) {
+			Book book = booksInCart.get(i).getKey();
+			int copies = booksInCart.get(i).getValue();
+			HBox box = new HBox(20);
+			Text text = new Text("Title : " + book.getTitle());
+			Text price = new Text("Price : " + book.getPrice() + " $s");
+			Text isbn = new Text("ISBN : " + book.getISBN());
+			Text count = new Text("Copies : " + copies);
+
+			Button remove = new Button("Remove");
+			remove.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
 				public void handle(ActionEvent arg0) {
-					userManager.removeItemFromCart(user, book.getISBN());
+					removeSuccess.setVisible(false);
+					removeError.setVisible(false);
+					if (userManager.removeItemFromCart(user, book.getISBN())) {
+						removeSuccess.setVisible(true);
+					} else {
+						removeError.setVisible(true);
+
+					}
 					initData(user);
 				}
-    			
-    		});
-    		box.getChildren().add(text);
-    		box.getChildren().add(price);
-    		box.getChildren().add(remove);
-    		box.setAlignment(Pos.CENTER); 
-    		box.setStyle(cssLayout);
-    		booksTable.getChildren().add(box);
-    	}
+
+			});
+			box.getChildren().add(text);
+			box.getChildren().add(price);
+			box.getChildren().add(isbn);
+			box.getChildren().add(count);
+			box.getChildren().add(remove);
+			box.setAlignment(Pos.CENTER);
+			box.setStyle(cssLayout);
+			booksTable.getChildren().add(box);
+		}
 
 	}
 
