@@ -8,7 +8,7 @@ import java.util.*;
 
 public class DataBase {
     private Connection con;
-    private final String dpUrl = "jdbc:mysql://localhost:3306/bookstore"; // to be modified
+    private final String dpUrl = "jdbc:mysql://localhost:3306/bookstore";
     private final String user = "root";
     private final String pass = "1200";
 

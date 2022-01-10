@@ -38,12 +38,12 @@ public class ManagerDB {
 	}
 
 	public boolean setManager(String userName) {
-		String q = "select setManager(\"" + userName + "\")";
+		String q = "select promote(\"" + userName + "\")";
 		return DBM.executeBooleanQueries(q);
 	}
 	
 	public boolean setCustomer(String userName) {
-		String q = "select setCustomer(\"" + userName + "\")";
+		String q = "select demote(\"" + userName + "\")";
 		return DBM.executeBooleanQueries(q);
 	}
 
